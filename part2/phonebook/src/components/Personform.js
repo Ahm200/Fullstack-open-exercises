@@ -7,8 +7,8 @@ const PersonForm = ({addPerson,newName,newNumber,handleNameChange,handleNumberCh
             <form onSubmit={addPerson}>
         <h1>add a new</h1>
         <div>
-          name: <input value={newName} onChange={handleNameChange} />
-          <div>number: <input value={newNumber} onChange={handleNumberChange}/></div>
+          name: <input value={newName} onChange={handleNameChange} required />
+          <div>number: <input value={newNumber} onChange={handleNumberChange} required/></div>
         </div>
         <div>
           <button type="submit">add</button>
