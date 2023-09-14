@@ -26,7 +26,7 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
     const exist = persons.filter(person => person.name === newName)
-    console.log(exist);
+
     if (exist.length === 0) {
       const personObject = {
         name: newName,
@@ -39,8 +39,8 @@ const App = () => {
           setNewName('');
           setNewNumber('');
 
-          showMessage(`Added ${newName}`,"success");
-        })
+          showMessage(`Added ${newName}`, "success");
+        }).catch(error => showMessage(error.response.data.error, "error"))
     }
     else {
       if (window.confirm(`${newName} is already added to phonebook,replace the old number with new one?`)) {
@@ -50,10 +50,11 @@ const App = () => {
           .update(exist[0].id, ChangedPerson)
           .then(returnedData => {
             setPersons(persons.map(person => person.id !== returnedData.id ? person : returnedData));
-          })
-        showMessage(`Updated ${exist[0].name}'s number`,"success");
-        setNewName('');
-        setNewNumber('');
+            showMessage(`Updated ${exist[0].name}'s number`, "success");
+            setNewName('');
+            setNewNumber('');
+          }).catch(error => showMessage(error.response.data.error,"error"))
+
       }
     }
   }
@@ -66,8 +67,7 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
-  const showMessage = (msg,type) =>
-  {
+  const showMessage = (msg, type) => {
     setMessage(msg);
     setMessageType(type);
     setTimeout(() => {
@@ -86,12 +86,12 @@ const App = () => {
       personService
         .remove(id)
         .then(response => {
-          showMessage(`Deleted ${name}`,"error");
+          showMessage(`Deleted ${name}`, "error");
           const updatedPerson = persons.filter(p => p.id !== id)
           setPersons(updatedPerson)
         })
         .catch(error => {
-          showMessage(`Information of ${name} has already been removed from server`,"error");
+          showMessage(`Information of ${name} has already been removed from server`, "error");
         })
     }
   }

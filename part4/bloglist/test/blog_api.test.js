@@ -81,7 +81,6 @@ describe('addition of a new blog', () => {
       url: 'https://www.example.com',
     }
 
-
     await api
       .post('/api/blogs')
       .send(newBlog)
