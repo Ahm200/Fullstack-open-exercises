@@ -12,8 +12,10 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
-
   const user = request.user
+  
+  if(!request.user)
+    response.status(401).json({ error : 'operation not allowed' })
 
   const blog = new Blog({
     title: body.title,
@@ -42,15 +44,14 @@ blogsRouter.get('/:id', async (request, response,) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  
   const user = request.user
   const blog = await Blog.findById(request.params.id)
 
-  if (blog.user.toString() === user.id) {
+  if (blog.user.toString() === user.id.toString()) {
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
   }else {
-    return response.status(401).json({ error: 'invalid user' })
+    return response.status(401).json({ error: 'operation not allowed' })
   }
 })
 
